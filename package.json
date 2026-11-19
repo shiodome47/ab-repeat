@@ -1,0 +1,70 @@
+{
+  "name": "@shiodome47/ab-repeat",
+  "version": "0.1.0",
+  "description": "動画の区間（A〜B）をくり返し再生する React の部品。<video> と YouTube のループ・A・B の操作の列・くり返しの回数。",
+  "keywords": [
+    "react",
+    "video",
+    "ab-repeat",
+    "loop",
+    "youtube",
+    "practice"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shiodome47/ab-repeat.git"
+  },
+  "homepage": "https://github.com/shiodome47/ab-repeat#readme",
+  "bugs": "https://github.com/shiodome47/ab-repeat/issues",
+  "type": "module",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./style.css": "./dist/style.css",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup && node scripts/copy-css.mjs",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "dev": "vite --config examples/web/vite.config.ts",
+    "build:demo": "vite build --config examples/web/vite.config.ts",
+    "prepack": "npm run build",
+    "prepublishOnly": "npm run typecheck && npm test"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0"
+  },
+  "devDependencies": {
+    "@testing-library/dom": "^10.4.2",
+    "@testing-library/jest-dom": "^8.0.0",
+    "@testing-library/react": "^16.3.3",
+    "@types/node": "^22.20.5",
+    "@types/react": "^18.3.31",
+    "@types/react-dom": "^18.3.7",
+    "@vitejs/plugin-react": "^6.3.0",
+    "jsdom": "^31.0.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tsup": "^9.0.0",
+    "typescript": "^5.9.3",
+    "vite": "^8.3.8",
+    "vitest": "^5.1.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

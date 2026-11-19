@@ -1,0 +1,254 @@
+/*
+ * @shiodome47/ab-repeat の見た目（A-B リピートの操作の列）。
+ * すべて .ab-repeat（部品のいちばん外の要素）の中だけに効く。使う側のページの見た目は変えない。
+ *
+ * 色や大きさは、下の変数（--ab-…）を上書きすれば変えられる。例:
+ *   .ab-repeat { --ab-a-text: #2563eb; --ab-a-bg: #dbeafe; }
+ * 明るい表示・暗い表示で分けて変えるときは、[data-theme] か @media (prefers-color-scheme: dark) の中で。
+ *
+ * 明るい・暗いは、部品の theme（'light' | 'dark' | 'system'）で決まる。
+ * 'system'（ふつう）は端末の設定（prefers-color-scheme）に合わせる。
+ * variant="overlay"（動画の上・黒い帯の上）は、theme にかかわらず白い文字。
+ */
+
+/* 明るい表示（既定）。:where() で「強さ」を 0 にしてあるので、使う側の .ab-repeat { --ab-…: … } が必ず勝つ */
+:where(.ab-repeat) {
+  --ab-border: #e5e5e5; /* 上の区切り線 */
+  --ab-button-bg: rgb(245 245 245 / 0.7); /* 決めていない A・B の背景 */
+  --ab-button-text: #404040;
+  --ab-button-hover-bg: #f5f5f5;
+  --ab-button-hover-text: #171717;
+  --ab-ready-text: #262626; /* A だけあるときの B（押すと B を置く） */
+  --ab-a-bg: #dcfce7; /* A を置いたとき（green-100） */
+  --ab-a-hover-bg: #bbf7d0;
+  --ab-a-text: #16a34a;
+  --ab-b-bg: #fee2e2; /* B を置いたとき（red-100） */
+  --ab-b-hover-bg: #fecaca;
+  --ab-b-text: #dc2626;
+  --ab-adjust-text: #525252; /* A−・A＋・B−・B＋ */
+  --ab-adjust-hover-bg: #f5f5f5;
+  --ab-adjust-hover-text: #262626;
+  --ab-adjust-active-bg: #e5e5e5;
+  --ab-arrow: #525252; /* A と B のあいだの → */
+  --ab-hint: #737373; /* A・B が無いときの説明 */
+  --ab-clear: #737373; /* × */
+  --ab-clear-hover: #262626;
+  --ab-disabled-opacity: 0.3; /* 押せない B */
+  --ab-toggle-radius: 0.5rem;
+  --ab-adjust-radius: 0.375rem;
+  --ab-toggle-font-size: 1rem;
+  --ab-adjust-font-size: 0.875rem;
+  --ab-hint-font-size: 0.6875rem;
+}
+
+/* 暗い表示（theme="dark"、または theme="system" で端末が暗い設定） */
+:where(.ab-repeat[data-theme='dark']) {
+  --ab-border: #171717;
+  --ab-button-bg: rgb(38 38 38 / 0.5);
+  --ab-button-text: #d4d4d4;
+  --ab-button-hover-bg: #262626;
+  --ab-button-hover-text: #f5f5f5;
+  --ab-ready-text: #e5e5e5;
+  --ab-a-bg: rgb(20 83 45 / 0.5);
+  --ab-a-hover-bg: #14532d;
+  --ab-a-text: #4ade80;
+  --ab-b-bg: rgb(127 29 29 / 0.5);
+  --ab-b-hover-bg: #7f1d1d;
+  --ab-b-text: #f87171;
+  --ab-adjust-text: #a3a3a3;
+  --ab-adjust-hover-bg: #262626;
+  --ab-adjust-hover-text: #e5e5e5;
+  --ab-adjust-active-bg: #404040;
+  --ab-arrow: #a3a3a3;
+  --ab-hint: #737373;
+  --ab-clear: #737373;
+  --ab-clear-hover: #e5e5e5;
+}
+
+@media (prefers-color-scheme: dark) {
+  :where(.ab-repeat:not([data-theme='light'])) {
+    --ab-border: #171717;
+    --ab-button-bg: rgb(38 38 38 / 0.5);
+    --ab-button-text: #d4d4d4;
+    --ab-button-hover-bg: #262626;
+    --ab-button-hover-text: #f5f5f5;
+    --ab-ready-text: #e5e5e5;
+    --ab-a-bg: rgb(20 83 45 / 0.5);
+    --ab-a-hover-bg: #14532d;
+    --ab-a-text: #4ade80;
+    --ab-b-bg: rgb(127 29 29 / 0.5);
+    --ab-b-hover-bg: #7f1d1d;
+    --ab-b-text: #f87171;
+    --ab-adjust-text: #a3a3a3;
+    --ab-adjust-hover-bg: #262626;
+    --ab-adjust-hover-text: #e5e5e5;
+    --ab-adjust-active-bg: #404040;
+    --ab-arrow: #a3a3a3;
+    --ab-hint: #737373;
+    --ab-clear: #737373;
+    --ab-clear-hover: #e5e5e5;
+  }
+}
+
+/* 動画の上・黒い帯の上（variant="overlay"）。明るい・暗いにかかわらず白い文字 */
+:where(.ab-repeat--overlay) {
+  --ab-border: rgb(255 255 255 / 0.1);
+  --ab-button-bg: rgb(255 255 255 / 0.1);
+  --ab-button-text: rgb(255 255 255 / 0.8);
+  --ab-button-hover-bg: rgb(255 255 255 / 0.2);
+  --ab-button-hover-text: #fff;
+  --ab-ready-text: rgb(255 255 255 / 0.8);
+  --ab-a-bg: rgb(20 83 45 / 0.5);
+  --ab-a-hover-bg: #14532d;
+  --ab-a-text: #4ade80;
+  --ab-b-bg: rgb(127 29 29 / 0.5);
+  --ab-b-hover-bg: #7f1d1d;
+  --ab-b-text: #f87171;
+  --ab-adjust-text: rgb(255 255 255 / 0.6);
+  --ab-adjust-hover-bg: rgb(255 255 255 / 0.1);
+  --ab-adjust-hover-text: #fff;
+  --ab-adjust-active-bg: rgb(255 255 255 / 0.2);
+  --ab-arrow: rgb(255 255 255 / 0.5);
+  --ab-hint: rgb(255 255 255 / 0.6);
+  --ab-clear: rgb(255 255 255 / 0.4);
+  --ab-clear-hover: #fff;
+  --ab-disabled-opacity: 0.5;
+}
+
+/* ── 列 ─────────────────────────────────────────────────────── */
+.ab-repeat {
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.75rem;
+  border-top: 1px solid var(--ab-border);
+  line-height: 1.5;
+}
+
+/* ボタンの見た目をそろえる（:where で強さ 0。下のクラスの指定が勝つ） */
+:where(.ab-repeat) button {
+  margin: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+:where(.ab-repeat) button:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+/* ── A・B ボタン ─────────────────────────────────────────────── */
+.ab-repeat__toggle {
+  min-width: 2.75rem;
+  padding: 0.375rem 0.875rem;
+  border-radius: var(--ab-toggle-radius);
+  font-size: var(--ab-toggle-font-size);
+  line-height: 1.5rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  background-color: var(--ab-button-bg);
+  color: var(--ab-button-text);
+  transition: background-color 150ms, color 150ms;
+}
+
+.ab-repeat__toggle:hover:not(:disabled) {
+  background-color: var(--ab-button-hover-bg);
+  color: var(--ab-button-hover-text);
+}
+
+.ab-repeat__toggle[data-state='ready'] {
+  color: var(--ab-ready-text);
+}
+
+.ab-repeat__toggle--a[data-state='set'] {
+  background-color: var(--ab-a-bg);
+  color: var(--ab-a-text);
+}
+
+.ab-repeat__toggle--a[data-state='set']:hover {
+  background-color: var(--ab-a-hover-bg);
+  color: var(--ab-a-text);
+}
+
+.ab-repeat__toggle--b[data-state='set'] {
+  background-color: var(--ab-b-bg);
+  color: var(--ab-b-text);
+}
+
+.ab-repeat__toggle--b[data-state='set']:hover {
+  background-color: var(--ab-b-hover-bg);
+  color: var(--ab-b-text);
+}
+
+.ab-repeat__toggle:disabled {
+  cursor: not-allowed;
+  opacity: var(--ab-disabled-opacity);
+}
+
+.ab-repeat__arrow {
+  font-size: 0.625rem;
+  color: var(--ab-arrow);
+}
+
+/* ── 微調整（A−・A＋・B−・B＋） ─────────────────────────────── */
+.ab-repeat__group {
+  display: flex;
+  align-items: center;
+  gap: 0.125rem;
+}
+
+.ab-repeat__group--a {
+  margin-left: 0.25rem;
+}
+
+.ab-repeat__adjust {
+  padding: 0.375rem 0.625rem;
+  border-radius: var(--ab-adjust-radius);
+  font-size: var(--ab-adjust-font-size);
+  line-height: 1.25rem;
+  font-weight: 500;
+  color: var(--ab-adjust-text);
+  transition: background-color 150ms, color 150ms;
+}
+
+.ab-repeat__adjust:hover {
+  background-color: var(--ab-adjust-hover-bg);
+  color: var(--ab-adjust-hover-text);
+}
+
+.ab-repeat__adjust:active {
+  background-color: var(--ab-adjust-active-bg);
+}
+
+/* ── ×（間を空けて、押し間違いを防ぐ） ───────────────────────── */
+.ab-repeat__clear {
+  display: inline-flex;
+  margin-left: 1rem;
+  padding: 0.375rem;
+  border-radius: var(--ab-adjust-radius);
+  color: var(--ab-clear);
+  transition: color 150ms;
+}
+
+.ab-repeat__clear:hover {
+  color: var(--ab-clear-hover);
+}
+
+.ab-repeat__icon {
+  display: block;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* ── A・B が無いときの説明 ─────────────────────────────────── */
+.ab-repeat__hint {
+  margin-left: auto;
+  font-size: var(--ab-hint-font-size);
+  color: var(--ab-hint);
+}
